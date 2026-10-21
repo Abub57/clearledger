@@ -8,7 +8,7 @@ import {
   scValToNative,
 } from "@stellar/stellar-sdk";
 import * as freighterApi from "@stellar/freighter-api";
-import { getConfig, getSorobanServer } from "./config.js";
+import { getConfig, getSorobanServer, validateSDKConfiguration } from "./config.js";
 
 const signTransactionFn =
   (
@@ -397,6 +397,7 @@ export class BaseContractClient {
     publicKey: string,
   ): Promise<Extract<TransactionSubmissionResult, { status: "SUCCESS" }>> {
     const config = getConfig();
+    validateSDKConfiguration(config);
     const server = this.getRpcServer();
     const account = await withRetry(() => server.getAccount(publicKey));
     const tx = new TransactionBuilder(account, {
