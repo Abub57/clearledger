@@ -65,6 +65,37 @@ paths:
                     status: degraded
                     error: listener or database unavailable
 
+  /live:
+    get:
+      tags: [Health]
+      summary: Check whether the API process is alive
+      security: []
+      responses:
+        "200":
+          description: Process is alive; dependencies are not checked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /ready:
+    get:
+      tags: [Health]
+      summary: Check API dependency readiness
+      security: []
+      responses:
+        "200":
+          description: Dependencies are ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadinessResponse"
+        "503":
+          description: One or more dependencies are unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadinessResponse"
   /diagnostics:
     get:
       tags: [Diagnostics]
@@ -497,20 +528,7 @@ components:
         error_class:
           type: string
           description: Stable failure classification; omitted when healthy.
-          enum:
-            - not_configured
-            - timeout
-            - network_error
-            - invalid_configuration
-            - unauthorized
-            - forbidden
-            - not_found
-            - rate_limited
-            - upstream_error
-            - http_error
-            - invalid_response
-            - rpc_error
-            - unhealthy
+          enum: [not_configured, timeout, network_error, invalid_configuration, unauthorized, forbidden, not_found, rate_limited, upstream_error, http_error, invalid_response, rpc_error, unhealthy]
       required: [name, configured, healthy, latency_ms]
 
     DiagnosticsResponse:
@@ -527,6 +545,27 @@ components:
           items:
             $ref: "#/components/schemas/DiagnosticFeature"
       required: [status, checked_at, features]
+
+    ReadinessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ready, degraded]
+        dependencies:
+          type: object
+          properties:
+            postgres:
+              type: string
+              enum: [ready, unavailable]
+            soroban_rpc:
+              type: string
+              enum: [ready, unavailable]
+            listener:
+              type: string
+              enum: [ready, unavailable]
+          required: [postgres, soroban_rpc, listener]
+      required: [status, dependencies]
 
     AuthChallengeResponse:
       type: object

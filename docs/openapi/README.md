@@ -7,6 +7,8 @@ The OpenAPI 3.0 specification for the Go indexer/API lives in [`indexer.yaml`](.
 | Method | Path                       | Auth | Description                       |
 | ------ | -------------------------- | ---- | --------------------------------- |
 | GET    | `/health`                  | None | Health check                      |
+| GET    | `/live`                    | None | Process liveness                  |
+| GET    | `/ready`                   | None | PostgreSQL, Soroban, and listener readiness |
 | GET    | `/diagnostics`             | JWT  | API connection diagnostics        |
 | GET    | `/metrics`                 | None | Prometheus metrics                |
 | GET    | `/auth`                    | None | Create SEP-10 challenge           |

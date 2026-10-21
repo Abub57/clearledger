@@ -7,7 +7,7 @@ All amounts are returned as strings to preserve u128 precision.
 
 ## GET /health
 
-Health check. Returns 200 if the indexer is running.
+Legacy health check for the listener and PostgreSQL. Returns 200 when both are healthy.
 
 ```json
 { "status": "ok" }
@@ -15,6 +15,16 @@ Health check. Returns 200 if the indexer is running.
 
 Returns 503 with `{"status": "degraded", "error": "..."}` when the listener or database is unavailable.
 
+## GET /live
+
+Process liveness only. It always returns 200 while the API process can serve
+requests and does not check PostgreSQL, Soroban RPC, or the ledger listener.
+
+## GET /ready
+
+Dependency readiness. Returns 200 with `status: "ready"` when PostgreSQL,
+Soroban RPC, and the ledger listener are healthy; otherwise it returns 503
+with `status: "degraded"` and a safe status for each dependency.
 ## GET /diagnostics
 
 Reports whether each external API-backed feature is configured and reachable.
