@@ -483,6 +483,15 @@ two tables hold the state:
   `attempt_count` and `terminal_status`, backfilled them from `attempts` and
   `status`, and keeps the legacy columns synchronized during rolling deploys.
 
+## Contract Event Versions
+
+`event_schema_version` identifies the contract event payload version the
+listener decoded (currently `1`). It is distinct from the envelope's
+`schema_version` (`1.0`). Events whose contract version the listener does not
+know are retained in `events_log` as `unknown_version` and are not delivered to
+subscribers until they have been reprocessed by a newer indexer build. See
+[Contract Event Versioning](./developer-guide/event-versioning.md).
+
 ## Implementation Details
 
 The webhook system was implemented in three phases:
