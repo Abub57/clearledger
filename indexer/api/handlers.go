@@ -33,6 +33,7 @@ type APIHandler struct {
 	listenerHealth       *ListenerHealth
 	dbHealthChecker      func(context.Context) error
 	sorobanHealthChecker func(context.Context) error
+	callSorobanRPCFn     func(context.Context, string, string, interface{}, interface{}) error
 
 	// dependency-injectable storage and contract readers. Defaults are wired
 	// in NewAPIHandler so production behavior is unchanged; tests in this
@@ -60,6 +61,7 @@ func NewAPIHandler(cfg *config.Config) (*APIHandler, error) {
 		usedChallenges:       make(map[string]time.Time),
 		dbHealthChecker:      defaultDBHealthChecker,
 		sorobanHealthChecker: defaultSorobanHealthChecker(cfg.SorobanRPCURL),
+		callSorobanRPCFn:     soroban.CallSorobanRPC,
 		getInvoiceByIDFn: func(ctx context.Context, id string) (*db.DbInvoice, error) {
 			return db.GetInvoiceByID(ctx, db.Pool, id)
 		},

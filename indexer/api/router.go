@@ -434,6 +434,7 @@ func NewRouter(h *APIHandler) (*chi.Mux, func()) {
 		r.Use(RateLimitMiddleware(rl))
 		r.Get("/stats", h.HandleGetStats)
 		r.Get("/events", h.HandleGetEvents)
+		r.Get("/transactions/{hash}", h.HandleGetTransactionStatus)
 		r.Get("/invoices/{id}", h.HandleGetInvoiceByID)
 		r.Get("/invoices", h.HandleGetInvoices)
 		r.Get("/pool/stats", h.HandleGetPoolStats)
