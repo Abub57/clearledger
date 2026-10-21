@@ -14,6 +14,7 @@ import { useConfirmDialogStore } from "@/store/confirmDialog";
 import { PoolClient, type SimulationResult } from "@clearledger/sdk";
 import { Address, nativeToScVal } from "@stellar/stellar-sdk";
 import { formatAmount } from "@/lib/assets";
+import { PoolPerformanceChart } from "@/components/shared/PoolPerformanceChart";
 import { useInvoiceList } from "@/hooks/useInvoices";
 import { ExternalLink } from "lucide-react";
 import { TxHistory } from "@/components/shared/TxHistory";
@@ -226,6 +227,11 @@ export default function LPDashboard() {
     Math.max(0, (typedStats?.utilizationRateBps ?? 0) / 100),
   );
   const sharePrice = formatSharePrice(typedStats?.sharePrice);
+  const networkLabel =
+    (process.env.NEXT_PUBLIC_STELLAR_NETWORK || "testnet").toLowerCase() ===
+    "mainnet"
+      ? "Stellar Mainnet"
+      : "Stellar Testnet";
   const activeInvoiceSnapshot = useMemo(
     () =>
       invoiceSnapshot.filter((invoice) =>
@@ -327,6 +333,13 @@ export default function LPDashboard() {
               </div>
             </div>
           )}
+        </section>
+
+        <section aria-label="Historical LP utilization" className="space-y-2">
+          <p className="text-xs text-slate-500">
+            USDC pool · {networkLabel} · indexed pool snapshots
+          </p>
+          <PoolPerformanceChart title="LP Utilization History" />
         </section>
 
         <section aria-labelledby="commitments-heading" className="space-y-3">
