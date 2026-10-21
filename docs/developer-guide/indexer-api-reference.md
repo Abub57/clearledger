@@ -84,8 +84,11 @@ Returns invoices with optional filtering.
 
 - `status` — filter by status: `Created`, `Listed`, `Funded`, `Active`, `Confirmed`, `Repaid`, `Defaulted`
 - `issuer` — filter by issuer Stellar address
+- `buyer` — filter by buyer Stellar address
+- `due_date` — exact due-date Unix timestamp in seconds
 - `page` — page number (default: 1)
 - `limit` — results per page (default: 20, max: 100)
+- `cursor` — opaque `next_cursor` from the previous response; cannot be combined with `page`
 
 **Response:**
 
@@ -107,9 +110,14 @@ Returns invoices with optional filtering.
   "total": 47,
   "page": 1,
   "limit": 20,
-  "totalPages": 3
+  "totalPages": 3,
+  "next_cursor": "eyJjcmVhdGVkX2F0IjoxNzQ4MDAwMDAwLCJpZCI6ImFiYzEyMy4uLiJ9"
 }
 ```
+
+Cursor pagination orders invoices by `created_at DESC, id DESC`. Keep the
+returned cursor unchanged when requesting the next page; the value is empty
+when no further results are available.
 
 ## GET /invoices/:id
 

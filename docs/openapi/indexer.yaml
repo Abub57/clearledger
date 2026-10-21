@@ -225,6 +225,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: buyer
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: due_date
+          in: query
+          required: false
+          description: Exact invoice due date as a Unix timestamp in seconds.
+          schema:
+            type: integer
+            format: int64
         - $ref: "#/components/parameters/Limit"
         - name: page
           in: query
@@ -233,6 +245,12 @@ paths:
             type: integer
             default: 1
             minimum: 1
+        - name: cursor
+          in: query
+          required: false
+          description: Opaque cursor returned as next_cursor. Cannot be combined with page.
+          schema:
+            type: string
       responses:
         "200":
           description: Invoice list
@@ -702,6 +720,9 @@ components:
           type: integer
         totalPages:
           type: integer
+        next_cursor:
+          type: string
+          description: Opaque cursor for the next page, or an empty string when there are no more results.
       required: [data, total, page, limit, totalPages]
 
     EventLog:
