@@ -43,9 +43,9 @@ type APIHandler struct {
 	getPoolStatsFn        func(context.Context) (*db.DbPoolStats, error)
 	getPoolSnapshotsFn    func(context.Context, int) ([]*db.DbPoolSnapshotHistory, error)
 	getRecentEventsFn     func(context.Context, int) ([]*db.EventLog, error)
-	getRecentEventsPageFn func(context.Context, int, int64, int) ([]*db.EventLog, error)
 	getProtocolStatsFn    func(context.Context) (*db.ProtocolStats, error)
 	readContractFn        func(ctx context.Context, rpcURL string, contractID string, method string, args []xdr.ScVal, serverKP *keypair.Full) (xdr.ScVal, error)
+	getRecentEventsPageFn func(context.Context, int, int64, int) ([]*db.EventLog, error)
 }
 
 func NewAPIHandler(cfg *config.Config) (*APIHandler, error) {
@@ -67,9 +67,9 @@ func NewAPIHandler(cfg *config.Config) (*APIHandler, error) {
 		getPoolStatsFn:        db.GetPoolStats,
 		getPoolSnapshotsFn:    db.GetPoolSnapshotHistory,
 		getRecentEventsFn:     db.GetRecentEvents,
-		getRecentEventsPageFn: db.GetRecentEventsPage,
 		getProtocolStatsFn:    db.GetProtocolStats,
 		readContractFn:        soroban.ReadContract,
+		getRecentEventsPageFn: db.GetRecentEventsPage,
 	}, nil
 }
 

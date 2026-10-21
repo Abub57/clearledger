@@ -65,7 +65,8 @@ func (h *APIHandler) HandlePostAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]string{
-		"token": token,
+	writeJSON(w, http.StatusOK, map[string]interface{}{
+		"token":      token,
+		"expires_in": h.cfg.JWTExpiryHours * 3600,
 	})
 }
